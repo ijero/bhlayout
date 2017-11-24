@@ -48,7 +48,7 @@
 	
 	在项目module的build.gradle中添加：
 	
-		compile 'cn.ijero.bhlayout:bhlayout:0.1.1'
+		compile 'cn.ijero.bhlayout:bhlayout:0.1.0'
 		
 	可能出现无法下载的情况，需要在Project的build.gradle添加一下源：
 	
