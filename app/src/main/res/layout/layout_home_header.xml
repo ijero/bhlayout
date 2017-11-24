@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_header_height">
+
+    <RelativeLayout
+        android:id="@+id/headerWeatherLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:id="@+id/headerWeatherIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/weather_large" />
+
+        <TextView
+            android:id="@+id/headerWeatherCelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@id/headerWeatherIcon"
+            android:layout_toRightOf="@id/headerWeatherIcon"
+            android:text="当前温度：12℃"
+            android:textColor="#FFF"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/headerWeatherNightCelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/headerWeatherCelText"
+            android:layout_alignStart="@id/headerWeatherCelText"
+            android:layout_below="@id/headerWeatherCelText"
+            android:layout_marginTop="5dp"
+            android:text="夜间：6℃"
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/headerNaviLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/read"
+            android:gravity="center"
+            android:text="小说"
+            android:textColor="#FFF" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/gamepad"
+            android:gravity="center"
+            android:text="游戏"
+            android:textColor="#FFF" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/video"
+            android:gravity="center"
+            android:text="视频"
+            android:textColor="#FFF" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/weather"
+            android:gravity="center"
+            android:text="天气"
+            android:textColor="#FFF" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="5dp"
+            android:drawableTop="@mipmap/shopping"
+            android:gravity="center"
+            android:text="购物"
+            android:textColor="#FFF" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/searchBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_toolbar_height"
+        android:layout_marginTop="@dimen/dimen_search_margin_top">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_search_edit_text">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:src="@mipmap/search" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:text="输入网址或搜索关键词" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/rqcode" />
+        </LinearLayout>
+
+    </FrameLayout>
+</RelativeLayout>
