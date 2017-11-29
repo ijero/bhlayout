@@ -48,5 +48,5 @@ publish {
     artifactId = 'bhlayout'
     publishVersion = "${setup.vName}"
     desc = "Release ${setup.vName} Done."
-    website = 'https://github.com/ijero/browser-home-layout'
+    website = 'https://github.com/ijero/bhlayout'
 }
