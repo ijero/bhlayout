@@ -47,6 +47,7 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
     private var endDy = 0
     // 保存当前的state
     private var curState = State.STATE_IDLE
+    private var curSnapState = SnapState.SNAP_NONE
     private var isNeedCallBackForEnd = true
 
     private var gesture: GestureDetector
@@ -112,6 +113,7 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
                     endDx = rootWidth
                 }
             }
+            curSnapState = endSnapState
             resetDraggingState()
         }
 
@@ -244,7 +246,7 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
         // 经过自己的手势判断该次触摸是否该交由helper拦截处理
         if (ev.action == MotionEvent.ACTION_MOVE) {
             val processed = gesture.onTouchEvent(ev)
-            if (processed){
+            if (processed) {
                 return mHelper.shouldInterceptTouchEvent(ev)
             }
             return super.onInterceptTouchEvent(ev)
@@ -270,14 +272,11 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
         val children = arrayListOf<View>()
         for (i in 0 until childCount) {
             val child = getChildAt(i)
-            if (i == 0) {
-                mHomeHeaderView = child
-            } else if (i == 1) {
-                mHomeContentView = child
-            } else if (i == 2) {
-                mRightContentView = child
-            } else {
-                children.add(child)
+            when (i) {
+                0 -> mHomeHeaderView = child
+                1 -> mHomeContentView = child
+                2 -> mRightContentView = child
+                else -> children.add(child)
             }
         }
 
@@ -303,22 +302,33 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        if (expanded) {
-            // 主页顶部
-            mHomeHeaderView?.layout(0, 0, mHomeHeaderView!!.measuredWidth, expandedHeight)
-            // 主页内容
-            mHomeContentView?.layout(0, expandedHeight, mHomeContentView!!.measuredWidth, mHomeContentView!!.measuredHeight + unexpandedHeight)
-            endDy = expandedHeight - unexpandedHeight
-            endSnapState = SnapState.SNAP_HOME_EXPANDED
+        if (curSnapState != SnapState.SNAP_TO_RIGHT) {
+            if (expanded) {
+                // 主页顶部
+                mHomeHeaderView?.layout(0, 0, mHomeHeaderView!!.measuredWidth, expandedHeight)
+                // 主页内容
+                mHomeContentView?.layout(0, expandedHeight, mHomeContentView!!.measuredWidth, mHomeContentView!!.measuredHeight + unexpandedHeight)
+                endDy = expandedHeight - unexpandedHeight
+                endSnapState = SnapState.SNAP_HOME_EXPANDED
+            } else {
+                // 主页顶部
+                mHomeHeaderView?.layout(0, unexpandedHeight - mHomeHeaderView!!.measuredHeight, mHomeHeaderView!!.measuredWidth, unexpandedHeight)
+                // 主页内容
+                mHomeContentView?.layout(0, unexpandedHeight, mHomeContentView!!.measuredWidth, mHomeContentView!!.measuredHeight + unexpandedHeight)
+                endSnapState = SnapState.SNAP_HOME_UNEXPANDED
+            }
+            // 右侧内容
+            mRightContentView?.layout(rootWidth, unexpandedHeight, rootWidth + mRightContentView!!.measuredWidth, mRightContentView!!.measuredHeight + unexpandedHeight)
         } else {
             // 主页顶部
             mHomeHeaderView?.layout(0, unexpandedHeight - mHomeHeaderView!!.measuredHeight, mHomeHeaderView!!.measuredWidth, unexpandedHeight)
             // 主页内容
-            mHomeContentView?.layout(0, unexpandedHeight, mHomeContentView!!.measuredWidth, mHomeContentView!!.measuredHeight + unexpandedHeight)
-            endSnapState = SnapState.SNAP_HOME_UNEXPANDED
+            mHomeContentView?.layout(-rootWidth, expandedHeight, -rootWidth + mHomeContentView!!.measuredWidth, mHomeContentView!!.measuredHeight + expandedHeight)
+            // 右侧内容
+            mRightContentView?.layout(0, unexpandedHeight, mRightContentView!!.measuredWidth, mRightContentView!!.measuredHeight + unexpandedHeight)
+            endSnapState = SnapState.SNAP_TO_RIGHT
         }
-        // 右侧内容
-        mRightContentView?.layout(rootWidth, unexpandedHeight, rootWidth + mRightContentView!!.measuredWidth, mRightContentView!!.measuredHeight + unexpandedHeight)
+        curSnapState = endSnapState
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
