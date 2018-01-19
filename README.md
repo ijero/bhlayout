@@ -48,7 +48,7 @@
 	
 	在项目module的build.gradle中添加：
 	
-		compile 'cn.ijero.bhlayout:bhlayout:0.1.1'
+		compile 'cn.ijero.bhlayout:bhlayout:0.1.2'
 		
 	可能出现无法下载的情况，需要在Project的build.gradle添加一下源：
 	
@@ -100,42 +100,64 @@
 
 	在java中，对BHLayout设置滑动监听器（setOnStateChangeListener），可以实时监听滑动状态，以实现更多的动画效果。可以参考示例程序：[demo](./app)
 
-6. 简单示例：
+6. Demo简单示例（Kotlin）：
 
-	这里简单介绍一下接口用法，并不是实际的demo效果：
-	
-		class MainActivity : AppCompatActivity(), BHLayout.OnStateChangeListener, BHLayout.OnDragCallback {
-		    // 该方法的返回结果直接决定了是否支持拖拽，可以参考demo中的解决首页recyclerView上下滑动冲突所做的操作，
-		    // 通过返回recyclerView的滑动距离是否等于0，才让这个组件进行工作。
-		    override fun onDragEnable(): Boolean {
-		        return true
-		    }
-		
-		    override fun onStateChange(view: View?, state: BHLayout.State, snapState: BHLayout.SnapState, dx: Int, dy: Int) {
-		        // 参考demo中的示例，根据滑动的dx或者dy来设置其他的view进行透明度/位移/缩放等动画可以实现更加炫酷的效果
-		        // view 当前事件产生的view
-		        // state 当前的滑动事件
-		        // snapState 切换事件
-		        // dx x方向上的变化距离
-		        // dy y方向上的变化距离
-		    }
-		
-		    override fun onCreate(savedInstanceState: Bundle?) {
-		        super.onCreate(savedInstanceState)
-		        setContentView(R.layout.activity_main)
-		
-		        // 设置滑动监听器
-		        bhLayout.setOnStateChangeListener(this)
-		
-		        // 设置拖拽回调
-		        bhLayout.setOnDragCallback(this)
-		
-		        // 获取当前的BrowserHomeLayout.State
-		        bhLayout.getCurrentState()
-		        
-		    }
-		
-		}
+		package cn.ijero.bhlayout
+        
+        import android.os.Bundle
+        import android.support.v7.app.AppCompatActivity
+        import android.support.v7.widget.DividerItemDecoration
+        import android.view.View
+        import android.view.ViewGroup
+        import kotlinx.android.synthetic.main.activity_main.*
+        import kotlinx.android.synthetic.main.layout_home_content.*
+        import kotlinx.android.synthetic.main.layout_home_header.*
+        import kotlinx.android.synthetic.main.layout_right_content.*
+        
+        class MainActivity : AppCompatActivity(), BHLayout.OnStateChangeListener, BHLayout.OnDragBHLayoutCallback {
+            // 该方法的返回结果直接决定了是否支持拖拽
+            // 通过返回recyclerView的滑动距离等于0时，才让这个组件进行工作。
+            override fun onDragBHLayoutEnable(): Boolean {
+                return mainRecyclerView.computeVerticalScrollOffset() == 0
+            }
+        
+            override fun onStateChange(view: View?, state: BHLayout.State, snapState: BHLayout.SnapState, dx: Int, dy: Int) {
+                val headerHeight = resources.getDimensionPixelSize(R.dimen.dimen_header_height)
+                val toolbarHeight = resources.getDimensionPixelSize(R.dimen.dimen_toolbar_height)
+        
+                // 根据滑动距离计算搜索框应该移动的位移
+                val searchTop = (dy * (dy.toFloat() / (headerHeight + toolbarHeight))).toInt()
+                searchBarLayout.top = searchTop
+        
+                // 设置透明度和位移
+                headerWeatherLayout.alpha = dy.toFloat() / (headerHeight - toolbarHeight)
+                headerNaviLayout.alpha = dy.toFloat() / (headerHeight - toolbarHeight)
+                overrideView.alpha = (1 - dy.toFloat() / (headerHeight - toolbarHeight))
+                headerWeatherLayout.top = dy - headerHeight + toolbarHeight + (headerWeatherLayout.layoutParams as ViewGroup.MarginLayoutParams).topMargin
+                headerNaviLayout.top = dy - headerNaviLayout.measuredHeight + toolbarHeight - (headerNaviLayout.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin
+            }
+        
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                setContentView(R.layout.activity_main)
+        
+                browserHomeLayout.apply {
+                    setOnStateChangeListener(this@MainActivity)
+                    setOnDragCallback(this@MainActivity)
+                }
+        
+                mainRecyclerView.apply {
+                    adapter = MainRecyclerAdapter()
+                    addItemDecoration(DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
+                }
+        
+                rightRecyclerView.apply {
+                    adapter = RightRecyclerAdapter()
+                }
+            }
+        
+        }
+
 
 7. 意见反馈
 

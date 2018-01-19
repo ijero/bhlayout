@@ -38,7 +38,7 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
     // 是否是左右滑动状态
     private var isHorizontalDragging = false
     // 实时滑动的回调接口对象
-    private var onDragCallback: OnDragCallback? = null
+    private var onDragBHLayoutCallback: OnDragBHLayoutCallback? = null
     // 保存滑动结束的状态，用于动画完毕后处理回调方法
     private var endView: View? = null
     private var endState = State.STATE_IDLE
@@ -53,10 +53,10 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
     private var gesture: GestureDetector
     private var gestureListener = object : GestureDetector.SimpleOnGestureListener() {
         override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
-            if (onDragCallback?.onDragEnable() == true && !expanded && distanceY > 20) {
+            if (onDragBHLayoutCallback?.onDragBHLayoutEnable() == true && !expanded && distanceY > 20) {
                 // 如果是未展开状态，并且是向上滑
                 return false
-            } else if (onDragCallback?.onDragEnable() == true) {
+            } else if (onDragBHLayoutCallback?.onDragBHLayoutEnable() == true) {
                 return true
             }
             return false
@@ -138,7 +138,7 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
             return child.top
         }
 
-        override fun getViewVerticalDragRange(child: View?) = expandedHeight - unexpandedHeight
+        override fun getViewVerticalDragRange(child: View) = expandedHeight - unexpandedHeight
 
         override fun onViewPositionChanged(changedView: View, left: Int, top: Int, dx: Int, dy: Int) {
             if (!isDragging) {
@@ -204,7 +204,7 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
             onStateChangeListener?.onStateChange(changedView, curState, dx = dx, dy = dy)
         }
 
-        override fun getViewHorizontalDragRange(child: View?) = rootWidth
+        override fun getViewHorizontalDragRange(child: View) = rootWidth
     }
 
     private fun resetDraggingState() {
@@ -236,7 +236,7 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
         ta.recycle()
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun onTouchEvent(event: MotionEvent): Boolean {
         mHelper.processTouchEvent(event)
         return true
     }
@@ -372,8 +372,8 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
      *
      * @author Jero
      */
-    fun setOnDragCallback(onDragCallback: OnDragCallback) {
-        this.onDragCallback = onDragCallback
+    fun setOnDragCallback(onDragBHLayoutCallback: OnDragBHLayoutCallback) {
+        this.onDragBHLayoutCallback = onDragBHLayoutCallback
     }
 
     /**
@@ -506,12 +506,12 @@ constructor(ctx: Context, attrs: AttributeSet? = null)
      *
      * @author Jero
      */
-    interface OnDragCallback {
+    interface OnDragBHLayoutCallback {
         /**
          * 返回此时是否可以执行drag操作
          *
          * @author Jero
          */
-        fun onDragEnable(): Boolean = true
+        fun onDragBHLayoutEnable(): Boolean = true
     }
 }
