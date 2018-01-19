@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.ijero.bhlayout.BHLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/browserHomeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:expanded="true"
+    app:expandedHeight="@dimen/dimen_header_height"
+    app:unexpandedHeight="@dimen/dimen_toolbar_height"
+    tools:context="cn.ijero.appjava.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/mainHeaderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/bgImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/bg" />
+
+        <View
+            android:id="@+id/overrideView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@color/colorPrimary" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/layout_home_content" />
+
+    <include layout="@layout/layout_right_content" />
+
+    <include layout="@layout/layout_home_header" />
+
+</cn.ijero.bhlayout.BHLayout>

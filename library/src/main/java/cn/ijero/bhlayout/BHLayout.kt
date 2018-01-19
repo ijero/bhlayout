@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import cn.ijero.bhlayout.library.R
 
 /**
+ *
  * Created by Jero on 2017/11/21.
  */
 class BHLayout
