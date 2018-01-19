@@ -10,14 +10,14 @@ import kotlinx.android.synthetic.main.layout_home_content.*
 import kotlinx.android.synthetic.main.layout_home_header.*
 import kotlinx.android.synthetic.main.layout_right_content.*
 
-
-class MainActivity : AppCompatActivity(), BHLayout.OnStateChangeListener, BHLayout.OnDragCallback {
-    override fun onDragEnable(): Boolean {
+class MainActivity : AppCompatActivity(), BHLayout.OnStateChangeListener, BHLayout.OnDragBHLayoutCallback {
+    // 该方法的返回结果直接决定了是否支持拖拽
+    // 通过返回recyclerView的滑动距离等于0时，才让这个组件进行工作。
+    override fun onDragBHLayoutEnable(): Boolean {
         return mainRecyclerView.computeVerticalScrollOffset() == 0
     }
 
     override fun onStateChange(view: View?, state: BHLayout.State, snapState: BHLayout.SnapState, dx: Int, dy: Int) {
-
         val headerHeight = resources.getDimensionPixelSize(R.dimen.dimen_header_height)
         val toolbarHeight = resources.getDimensionPixelSize(R.dimen.dimen_toolbar_height)
 
