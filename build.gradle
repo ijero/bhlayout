@@ -19,8 +19,8 @@ ext.setup = [
         cSdk : 27,
         mSdk : 14,
         tSdk : 27,
-        vCode: 12,
-        vName: "0.1.2",
+        vCode: 13,
+        vName: "0.1.3",
 ]
 ext.support_version = "27.0.2"
 
